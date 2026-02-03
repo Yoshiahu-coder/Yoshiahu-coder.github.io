@@ -67,7 +67,7 @@ function pauseAudio() {
 
     isPlaying = false;
     isPaused = true;
-    updateWordDisplay('⏸️ Pausado');
+    updateWordDisplay('⏸️ Pause');
 }
 
 function stopAudio(finished = false) {
@@ -83,7 +83,7 @@ function stopAudio(finished = false) {
     isPaused = false;
     currentSentenceIndex = finished ? 0 : currentSentenceIndex;
 
-    updateWordDisplay(finished ? '✅ Audio finalizado' : '⏹️ Detenido');
+    updateWordDisplay(finished ? '✅ Start' : '⏹️ Stop');
     updateProgress();
 }
 
@@ -123,7 +123,7 @@ function changeLanguage(lang) {
 window.addEventListener('DOMContentLoaded', () => {
     disableControls();
     loadVoices();
-    updateWordDisplay('Esperando archivo PDF...');
+    updateWordDisplay('Waiting for a PDF file...');
 
     backgroundVideo = document.querySelector('video');
     if (backgroundVideo) {
@@ -131,3 +131,4 @@ window.addEventListener('DOMContentLoaded', () => {
         backgroundVideo.currentTime = 0;
     }
 });
+
