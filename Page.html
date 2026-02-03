@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Voice Reader with Background Video</title>
+
+    <link rel="stylesheet" href="PageCSS.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="video-overlay"></div>
+    
+    <!-- Sync indicator -->
+    <div class="sync-indicator" id="syncIndicator">
+        <i class="fas fa-sync-alt"></i> Synced with audio
+    </div>
+    
+    <!-- Loading indicator -->
+    <div class="loading" id="loadingIndicator">
+        <i class="fas fa-spinner fa-spin"></i> Loading video...
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-book-reader"></i> PDF to Voice Reader with Video</h1>
+            <p>Words synchronized with audio and background video</p>
+
+            <!-- Development notice -->
+            <div class="dev-notice" style="margin: 15px auto; padding: 12px; background: rgba(255, 243, 205, 0.9); border: 1px solid #facc15; border-radius: 6px; text-align: center; color: #92400e; font-size: 0.95rem;">
+                ⚠️ This site is still under development, so some errors may occur. Thank you for your understanding.
+            </div>
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9001539351321277"
+            crossorigin="anonymous"></script>
+        <!-- Head y foot -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-9001539351321277"
+            data-ad-slot="9508763588"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        </div>
+
+        <div class="main-content">
+            <!-- Upload panel -->
+            <div class="card">
+                <h2><i class="fas fa-file-upload"></i> Upload PDF</h2>
+                <div class="upload-area" id="dropArea">
+                    <div class="upload-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <p style="margin: 15px 0; color: #475569;">Drag your PDF file here or click to select</p>
+                    <input type="file" id="pdfInput" accept=".pdf" style="display: none;">
+                    <button class="upload-btn" onclick="document.getElementById('pdfInput').click()">
+                        <i class="fas fa-folder-open"></i> Select PDF
+                    </button>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: #94a3b8;">
+                        Maximum 10MB. PDF files only.
+                    </p>
+                </div>
+                
+                <div style="margin-top: 25px;">
+                    <button class="upload-btn" onclick="extractTextFromPDF()" style="width: 100%;">
+                        <i class="fas fa-cogs"></i> Process PDF and Convert to Audio
+                    </button>
+
+                    <div class="language-controls">
+                        <div style="margin-right: 15px; color: #64748b;">
+                            <i class="fas fa-globe"></i> Language:
+                        </div>
+
+                        <!-- Hidden radio -->
+                        <input type="radio" name="lang" id="lang-es" checked>
+                        <label class="lang-btn" for="lang-es" onclick="changeLanguage('es')">
+                            <i class="fas fa-language"></i> Spanish
+                        </label>
+
+                        <input type="radio" name="lang" id="lang-en">
+                        <label class="lang-btn" for="lang-en" onclick="changeLanguage('en')">
+                            <i class="fas fa-language"></i> English
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: rgba(224, 231, 255, 0.5); border-radius: 8px;">
+                    <h3 style="color: #4f46e5; margin-bottom: 10px;">
+                        <i class="fas fa-video"></i> Background Video
+                    </h3>
+                    <p style="color: #475569; font-size: 0.9rem; margin-bottom: 10px;">
+                        The video is automatically controlled by the text playback buttons.
+                    </p>
+                    <div id="videoInfo" style="font-size: 0.8rem; color: #64748b;">
+                        Video: Subway Surfers
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playback panel -->
+            <div class="card">
+                <h2><i class="fas fa-play-circle"></i> Synchronized Playback</h2>
+                
+                <div class="player-display">
+                    <div class="current-word-container">
+                        <div class="current-word" id="currentWordDisplay">
+                            Waiting for PDF file...
+                        </div>
+                        <div class="word-progress" id="wordProgress"></div>
+                    </div>
+                    
+                    <!-- Background video -->
+                    <video id="backgroundVideo" loop muted playsinline>
+                        <source src="Subway Surfers.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                </div>
+
+                <!-- Main controls -->
+                <div class="main-controls">
+                    
+                    <div class="word-context" id="wordContext">
+                        Current sentence context
+                    </div>
+                    
+                    <div class="player-info" id="progressInfo">
+                        Sentence 0 of 0 • Segment 0 of 0
+                    </div>
+                    <div class="word-type-info" id="wordTypeInfo">
+                        Short words (<4 letters) are grouped automatically
+                    </div>
+                    <button class="control-btn" id="playBtn" onclick="playAudio()" disabled>
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-btn" id="pauseBtn" onclick="pauseAudio()" disabled>
+                        <i class="fas fa-pause"></i>
+                    </button>
+                    <button class="control-btn stop" onclick="stopAudio()">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+
+                <!-- Secondary controls -->
+                <div class="secondary-controls">
+                    <button class="control-btn secondary" onclick="previousSentence()" id="prevBtn" disabled>
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="control-btn secondary" onclick="nextSentence()" id="nextBtn" disabled>
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                </div>
+
+                <div class="speed-controls">
+                    <div style="margin-right: 15px; color: #bdc5d1;">
+                        <i class="fas fa-tachometer-alt"></i> Speed:
+                    </div>
+                    <button class="speed-btn active" onclick="changeSpeed(1.5)">1x</button>
+                    <button class="speed-btn" onclick="changeSpeed(2.5)">2x</button>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="currentProgress">0%</span>
+                        <span id="timeInfo">00:00 / 00:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><i class="fas fa-info-circle"></i> System synchronized: Audio, text, and video in perfect harmony</p>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="PDFREAD.js"></script>
+    <script src="UI.js"></script>
+    <script src="Voices.js"></script>
+</body>
+</html>
