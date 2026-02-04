@@ -46,7 +46,7 @@ function startHighlighting() {
     updateWordDisplay(groups[0]);
 
     const baseInterval =
-        currentLanguage === 'en' ? 280 : 400;
+        currentLanguage === 'en' ? 400 : 450;
 
     highlightTimer = setInterval(() => {
         currentGroupIndex++;
@@ -112,7 +112,7 @@ function changeSpeed(speed) {
 
 function changeLanguage(lang) {
     currentLanguage = lang;
-    speechRate = lang === 'en' ? 0.75 : 1.5;
+    speechRate = lang === 'en' ? 0.75 : 1;
     loadVoices();
 }
 
@@ -131,4 +131,5 @@ window.addEventListener('DOMContentLoaded', () => {
         backgroundVideo.currentTime = 0;
     }
 });
+
 
