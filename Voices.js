@@ -104,7 +104,7 @@ function pauseAudio() {
 
     isPlaying = false;
     isPaused = true;
-    updateWordDisplay('⏸️ Pausado');
+    updateWordDisplay('⏸️ Paused');
 }
 
 function stopAudio(finished = false) {
@@ -120,6 +120,7 @@ function stopAudio(finished = false) {
     isPaused = false;
     currentSentenceIndex = finished ? 0 : currentSentenceIndex;
 
-    updateWordDisplay(finished ? '✅ Audio finalizado' : '⏹️ Detenido');
+    updateWordDisplay(finished ? '✅ Done!' : '⏹️ Stop');
     updateProgress();
 }
+
