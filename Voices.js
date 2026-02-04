@@ -46,7 +46,7 @@ function startHighlighting() {
     updateWordDisplay(groups[0]);
 
     const baseInterval =
-        currentLanguage === 'en' ? 400 : 450;
+        currentLanguage === 'en' ? 450 : 480;
 
     highlightTimer = setInterval(() => {
         currentGroupIndex++;
@@ -131,5 +131,6 @@ window.addEventListener('DOMContentLoaded', () => {
         backgroundVideo.currentTime = 0;
     }
 });
+
 
 
